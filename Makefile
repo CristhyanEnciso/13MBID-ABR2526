@@ -1,3 +1,5 @@
+PYTHON ?= python3
+SHELL := bash
 .PHONY: check_python check_virtualenv create_env
 
 check_python:
