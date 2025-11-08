@@ -1,0 +1,58 @@
+stages:
+  describe:
+    cmd: python src/describe_data.py
+    deps:
+      - data/raw/bank-additional-full.csv
+      - src/describe_data.py
+    outs:
+      - reports/validation/desc_summary.csv
+      - reports/figures/desc_hist_age.png
+
+  validate:
+    cmd: python src/validate_data.py
+    deps:
+      - data/raw/bank-additional-full.csv
+      - src/validate_data.py
+    outs:
+      - reports/validation/nulls_report.csv
+      - reports/validation/duplicates.csv
+
+  clean:
+    cmd: python src/clean_data.py
+    deps:
+      - data/raw/bank-additional-full.csv
+      - src/clean_data.py
+    outs:
+      - data/interim/banking_clean_step1.csv
+
+  select:
+    cmd: python src/select_data.py
+    deps:
+      - data/interim/banking_clean_step1.csv
+      - src/select_data.py
+    outs:
+      - reports/selection/features_selected.csv
+
+  build_features:
+    cmd: python src/build_features.py
+    deps:
+      - data/interim/banking_clean_step1.csv
+      - src/build_features.py
+    outs:
+      - data/interim/banking_features.csv
+
+  integrate:
+    cmd: python src/integrate_data.py
+    deps:
+      - data/interim/banking_features.csv
+      - src/integrate_data.py
+    outs:
+      - data/processed/banking_model_base.csv
+
+  format:
+    cmd: python src/format_data.py
+    deps:
+      - data/processed/banking_model_base.csv
+      - src/format_data.py
+    outs:
+      - data/processed/banking_final.csv
