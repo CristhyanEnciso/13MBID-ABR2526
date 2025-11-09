@@ -38,3 +38,37 @@ stages:
       hash: md5
       md5: c63108778a49b9fdc22afe3449b7c74f
       size: 1448
+  visualize_data:
+    cmd: "python -m src.data_visualization --input data/raw/bank-additional-full.csv\
+      \ --sep \";\" --figdir reports/figures/eda --summarydir reports/summary\n"
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: src/data_visualization.py
+      hash: md5
+      md5: 6924d3e5762ca837d18a3b14e84c1fbf
+      size: 3519
+    outs:
+    - path: reports/figures/eda
+      hash: md5
+      md5: 33316b3c8e3d56100ffa1234f6f6b0df.dir
+      size: 418766
+      nfiles: 14
+    - path: reports/summary/categorical_cardinality.csv
+      hash: md5
+      md5: 670d5e92eff6d0c476420ec9bc7051f4
+      size: 125
+    - path: reports/summary/corr_matrix.csv
+      hash: md5
+      md5: 2d3f5b23fcbebe482abe56ef9a4e3937
+      size: 2086
+    - path: reports/summary/nulls_by_column.csv
+      hash: md5
+      md5: 432d89e2bfb22a5fd4315c9a07fa9e76
+      size: 252
+    - path: reports/summary/target_balance_pct.csv
+      hash: md5
+      md5: a9f2d2be80999c353e2fcb130ad79413
+      size: 35

@@ -1,0 +1,10 @@
+# Ignorar localmente
+#/summary_describe.csv
+#/summary_dtypes.csv
+#/summary_nulls.csv
+#/summary_cardinality.csv
+#/summary_value_counts.csv
+/target_balance_pct.csv
+/nulls_by_column.csv
+/categorical_cardinality.csv
+/corr_matrix.csv
