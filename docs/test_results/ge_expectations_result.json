@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "expectations": [
+    {
+      "expectation": "y_in_yes_no",
+      "success": true
+    },
+    {
+      "expectation": "age_in_[17,100]",
+      "success": true
+    },
+    {
+      "expectation": "no_nan_in_raw",
+      "success": true
+    },
+    {
+      "expectation": "month_in_valid_set",
+      "success": true
+    },
+    {
+      "expectation": "day_of_week_in_valid_set",
+      "success": true
+    },
+    {
+      "expectation": "contact_in_valid_set",
+      "success": true
+    },
+    {
+      "expectation": "duration_ge_0",
+      "success": true
+    },
+    {
+      "expectation": "campaign_ge_1",
+      "success": true
+    },
+    {
+      "expectation": "pdays_in_{999}U[0,inf)",
+      "success": true
+    },
+    {
+      "expectation": "previous_ge_0",
+      "success": true
+    },
+    {
+      "expectation": "education_non_empty",
+      "success": true
+    }
+  ],
+  "statistics": {
+    "success_count": 11,
+    "total_count": 11
+  }
+}

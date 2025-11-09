@@ -7,17 +7,17 @@ stages:
       --outdir reports/summary
       --figdir reports/figures/desc
     deps:
-      - src/describe_data.py
-      - data/raw/bank-additional-full.csv
+    - src/describe_data.py
+    - data/raw/bank-additional-full.csv
     outs:
-      - reports/figures/desc:
-          cache: false
+    - reports/figures/desc:
+        cache: false
     metrics:
-      - reports/summary/summary_describe.csv
-      - reports/summary/summary_dtypes.csv
-      - reports/summary/summary_nulls.csv
-      - reports/summary/summary_cardinality.csv
-      - reports/summary/summary_value_counts.csv
+    - reports/summary/summary_describe.csv
+    - reports/summary/summary_dtypes.csv
+    - reports/summary/summary_nulls.csv
+    - reports/summary/summary_cardinality.csv
+    - reports/summary/summary_value_counts.csv
 
   visualize_data:
     cmd: >
@@ -27,13 +27,34 @@ stages:
       --figdir reports/figures/eda
       --summarydir reports/summary
     deps:
-      - src/data_visualization.py
-      - data/raw/bank-additional-full.csv
+    - src/data_visualization.py
+    - data/raw/bank-additional-full.csv
     outs:
-      - reports/figures/eda:
-          cache: false
+    - reports/figures/eda:
+        cache: false
     metrics:
-      - reports/summary/target_balance_pct.csv
-      - reports/summary/nulls_by_column.csv
-      - reports/summary/categorical_cardinality.csv
-      - reports/summary/corr_matrix.csv
+    - reports/summary/target_balance_pct.csv
+    - reports/summary/nulls_by_column.csv
+    - reports/summary/categorical_cardinality.csv
+    - reports/summary/corr_matrix.csv
+
+  test_data_quality:
+    cmd: python -m pytest --html=docs/test_results/test_results.html --self-contained-html
+      tests/test_data_quality.py
+    deps:
+    - tests/test_data_quality.py
+    - data/raw/bank-additional-full.csv
+    outs:
+    - docs/test_results/test_results.html
+    - reports/validation/quality_summary.csv
+    - reports/validation/null_distribution.csv
+    - reports/validation/duplicate_rows.csv
+    - reports/validation/data_types_report.csv
+  
+  test_data_gx:
+    cmd: pytest --html=docs/test_results/test_results_gx.html --self-contained-html tests/test_data_gx.py
+    deps:
+     - tests/test_data_gx.py
+     - data/raw/bank-additional-full.csv
+    outs:
+     - docs/test_results/test_results_gx.html

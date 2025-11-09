@@ -72,3 +72,53 @@ stages:
       hash: md5
       md5: a9f2d2be80999c353e2fcb130ad79413
       size: 35
+  test_data_quality:
+    cmd: python -m pytest --html=docs/test_results/test_results.html --self-contained-html
+      tests/test_data_quality.py
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: tests/test_data_quality.py
+      hash: md5
+      md5: f352b6123ca064f14f47e09fe3da97b2
+      size: 3331
+    outs:
+    - path: docs/test_results/test_results.html
+      hash: md5
+      md5: 882a8c563544123b267028058378f246
+      size: 35598
+    - path: reports/validation/data_types_report.csv
+      hash: md5
+      md5: 565be97113b744ca3e7bf844c17cc430
+      size: 110
+    - path: reports/validation/duplicate_rows.csv
+      hash: md5
+      md5: 406e5b57edf9e51c8837d7b1d21b0a4c
+      size: 16
+    - path: reports/validation/null_distribution.csv
+      hash: md5
+      md5: 432d89e2bfb22a5fd4315c9a07fa9e76
+      size: 252
+    - path: reports/validation/quality_summary.csv
+      hash: md5
+      md5: 1072298dd19b16c876affa7bc7f10bbc
+      size: 53
+  test_data_gx:
+    cmd: pytest --html=docs/test_results/test_results_gx.html --self-contained-html
+      tests/test_data_gx.py
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: tests/test_data_gx.py
+      hash: md5
+      md5: d5aad0c32bdc044d9db111c4525d5ce4
+      size: 4098
+    outs:
+    - path: docs/test_results/test_results_gx.html
+      hash: md5
+      md5: cdbd10c678e3816bea66437738898879
+      size: 33121
