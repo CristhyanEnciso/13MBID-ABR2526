@@ -1,0 +1,2 @@
+La variable 'duration' influye fuertemente en el target, pero solo se conoce a posteriori de la llamada.
+No debe utilizarse como feature en modelos predictivos realistas.

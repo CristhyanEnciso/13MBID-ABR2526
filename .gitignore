@@ -161,4 +161,7 @@ cython_debug/
 
 mlruns
 
-# .datastorage
+.gitignore
+.datastorage/
+.vscode/
+reports/figures/

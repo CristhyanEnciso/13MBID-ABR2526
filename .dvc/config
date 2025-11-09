@@ -1,7 +1,0 @@
-[core]
-    autostage = true
-    remote = local_storage
-['remote "storage"']
-    url = ../.datastorage
-['remote "local_storage"']
-    url = ../.datastorage
