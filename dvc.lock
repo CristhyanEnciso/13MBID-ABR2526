@@ -122,3 +122,31 @@ stages:
       hash: md5
       md5: cdbd10c678e3816bea66437738898879
       size: 33121
+  select_features:
+    cmd: python -m src.select_features
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: params.yaml
+      hash: md5
+      md5: 5fb54a4643dc33c78988d9d01b5523b4
+      size: 537
+    - path: src/select_features.py
+      hash: md5
+      md5: b95e754612c682e0685e5c5f2063ff11
+      size: 1985
+    outs:
+    - path: data/interim/banking_selected.csv
+      hash: md5
+      md5: ef4afd9d9e55a710fd23a1252f917b67
+      size: 4184271
+    - path: reports/selection/features_selected.csv
+      hash: md5
+      md5: 4b852b7c99d144637c756906c1f1e84c
+      size: 170
+    - path: reports/selection/removed_features.csv
+      hash: md5
+      md5: 09d57b8f8ee5d980084029622e951cc6
+      size: 139

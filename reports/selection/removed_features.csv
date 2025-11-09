@@ -1,0 +1,6 @@
+feature,reason
+default,declared_drop
+housing,not_in_keep_list
+loan,not_in_keep_list
+duration,not_in_keep_list
+pdays,not_in_keep_list
