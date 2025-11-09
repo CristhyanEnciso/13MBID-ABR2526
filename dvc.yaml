@@ -1,0 +1,39 @@
+stages:
+  describe_data:
+    cmd: >
+      python -m src.describe_data
+      --input data/raw/bank-additional-full.csv
+      --sep ";"
+      --outdir reports/summary
+      --figdir reports/figures/desc
+    deps:
+      - src/describe_data.py
+      - data/raw/bank-additional-full.csv
+    outs:
+      - reports/figures/desc:
+          cache: false
+    metrics:
+      - reports/summary/summary_describe.csv
+      - reports/summary/summary_dtypes.csv
+      - reports/summary/summary_nulls.csv
+      - reports/summary/summary_cardinality.csv
+      - reports/summary/summary_value_counts.csv
+
+  visualize_data:
+    cmd: >
+      python -m src.data_visualization
+      --input data/raw/bank-additional-full.csv
+      --sep ";"
+      --figdir reports/figures/eda
+      --summarydir reports/summary
+    deps:
+      - src/data_visualization.py
+      - data/raw/bank-additional-full.csv
+    outs:
+      - reports/figures/eda:
+          cache: false
+    metrics:
+      - reports/summary/target_balance_pct.csv
+      - reports/summary/nulls_by_column.csv
+      - reports/summary/categorical_cardinality.csv
+      - reports/summary/corr_matrix.csv

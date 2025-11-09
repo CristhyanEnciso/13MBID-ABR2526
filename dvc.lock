@@ -1,0 +1,40 @@
+schema: '2.0'
+stages:
+  describe_data:
+    cmd: "python -m src.describe_data --input data/raw/bank-additional-full.csv --sep\
+      \ \";\" --outdir reports/summary --figdir reports/figures/desc\n"
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: src/describe_data.py
+      hash: md5
+      md5: f3a2ec20bb7d775d2dea46b97b1ed16c
+      size: 3621
+    outs:
+    - path: reports/figures/desc
+      hash: md5
+      md5: 25b1337658d259e335494ea95edc1124.dir
+      size: 264291
+      nfiles: 21
+    - path: reports/summary/summary_cardinality.csv
+      hash: md5
+      md5: 8a3701afc0489d299a61adbfedceffbe
+      size: 268
+    - path: reports/summary/summary_describe.csv
+      hash: md5
+      md5: ed2733f897dbb2166dea8037696bc352
+      size: 1317
+    - path: reports/summary/summary_dtypes.csv
+      hash: md5
+      md5: 4cc5ba0a43b11bb31bd8a3d2c3e63e09
+      size: 357
+    - path: reports/summary/summary_nulls.csv
+      hash: md5
+      md5: 97db627e9c2b5ff7ccd5aad2ac10ea10
+      size: 350
+    - path: reports/summary/summary_value_counts.csv
+      hash: md5
+      md5: c63108778a49b9fdc22afe3449b7c74f
+      size: 1448

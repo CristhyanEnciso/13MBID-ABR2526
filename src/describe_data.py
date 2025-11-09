@@ -11,7 +11,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--sep", type=str, default=";", help="Separador del CSV")
     p.add_argument("--outdir", type=Path, default=Path("reports/summary"),
                    help="Directorio de salida para resúmenes")
-    p.add_argument("--figdir", type=Path, default=Path("reports/figures/eda"),
+    p.add_argument("--figdir", type=Path, default=Path("reports/figures/desc"),
                    help="Directorio de salida para figuras")
     return p.parse_args()
 

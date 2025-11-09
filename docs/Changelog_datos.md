@@ -63,7 +63,7 @@ Este registro será actualizado tras cada iteración de procesamiento, reflejand
 - Se creó la estructura base de carpetas (`data/`, `src/`, `notebooks/`, `docs/`, `reports/`).
 - Se añadió un registro inicial de cambios (`docs/Changelog_datos.md`).
 
-**Commit asociado:** `a3b8d5f`  
+**Commit asociado:** `767d742`  
 **Tag:** `v0.5`
 
 ---
@@ -76,7 +76,7 @@ Este registro será actualizado tras cada iteración de procesamiento, reflejand
   - `summary_nulls.csv`
   - `summary_cardinality.csv`
   - `summary_value_counts.csv`
-- Se añadieron figuras de distribución e histogramas en `reports/figures/eda/`.
+- Se añadieron figuras de distribución e histogramas en `reports/figures/desc/`.
 - Se creó nota metodológica sobre la variable `duration`.
 - Scripts involucrados:
   - `src/describe_data.py`
