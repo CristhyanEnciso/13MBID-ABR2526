@@ -71,3 +71,15 @@ stages:
     metrics:
       - reports/selection/features_selected.csv
       - reports/selection/removed_features.csv
+
+  clean_data:
+    cmd: python -m src.clean_data
+    deps:
+      - src/clean_data.py
+      - data/interim/banking_selected.csv
+      - params.yaml
+    outs:
+      - data/interim/banking_clean.csv
+    metrics:
+      - reports/cleaning/data_loss_report.csv
+    

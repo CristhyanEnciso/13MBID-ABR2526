@@ -150,3 +150,27 @@ stages:
       hash: md5
       md5: 09d57b8f8ee5d980084029622e951cc6
       size: 139
+  clean_data:
+    cmd: python -m src.clean_data
+    deps:
+    - path: data/interim/banking_selected.csv
+      hash: md5
+      md5: ef4afd9d9e55a710fd23a1252f917b67
+      size: 4184271
+    - path: params.yaml
+      hash: md5
+      md5: 5fb54a4643dc33c78988d9d01b5523b4
+      size: 537
+    - path: src/clean_data.py
+      hash: md5
+      md5: f37f0ab676331cf5a854d391e245a555
+      size: 1312
+    outs:
+    - path: data/interim/banking_clean.csv
+      hash: md5
+      md5: 20110b1ffaaf4cbf92e8d0a743456f50
+      size: 3533102
+    - path: reports/cleaning/data_loss_report.csv
+      hash: md5
+      md5: 62616a0ad7e0d9b855bca83d4a052d7a
+      size: 126
