@@ -82,7 +82,7 @@ stages:
       - data/interim/banking_clean.csv
     metrics:
       - reports/cleaning/data_loss_report.csv
-      
+
   build_features:
     cmd: python -m src.build_features
     deps:
@@ -107,3 +107,13 @@ stages:
     metrics:
       - reports/integration/integration_summary.csv 
 
+  format_data:
+    cmd: python -m src.format_data
+    deps:
+      - src/format_data.py
+      - data/processed/bank_final.csv
+      - params.yaml
+    outs:
+      - data/processed/bank_formatted.csv
+    metrics:
+      - reports/format/format_summary.txt

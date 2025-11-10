@@ -230,3 +230,27 @@ stages:
       hash: md5
       md5: 838d88e38583cdce38c1d50511a174be
       size: 208
+  format_data:
+    cmd: python -m src.format_data
+    deps:
+    - path: data/processed/bank_final.csv
+      hash: md5
+      md5: a71159ec003a9b57e6233b7ec97690dd
+      size: 3494182
+    - path: params.yaml
+      hash: md5
+      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
+      size: 702
+    - path: src/format_data.py
+      hash: md5
+      md5: 7766155b5e23ff5a8d8790810daf0bf6
+      size: 1437
+    outs:
+    - path: data/processed/bank_formatted.csv
+      hash: md5
+      md5: e62269d8c1f69bb0c6c71d4cda50c2e0
+      size: 12440357
+    - path: reports/format/format_summary.txt
+      hash: md5
+      md5: 25f09e33136bd87baacd366028b027e3
+      size: 171
