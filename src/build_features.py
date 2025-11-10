@@ -18,7 +18,7 @@ REPORT_SUMMARY = FEAT.get("report_summary", True)
 # --- IO ---
 IN_CSV = "data/interim/banking_clean.csv"   # salida de #10
 df = pd.read_csv(IN_CSV)
-df = df.replace("unknown", pd.NA)  # por si quedara alguno rezagado
+df = df.replace("unknown", pd.NA) 
 
 # 1) prev_contact a partir de pdays (1 = fue contactado antes, 0 = nunca)
 if DERIVE_PREV and "pdays" in df.columns:
@@ -26,7 +26,7 @@ if DERIVE_PREV and "pdays" in df.columns:
     if DROP_PDAYS:
         df = df.drop(columns=["pdays"])
 
-# 2) Mapear yes/no → 1/0 (solo si existen las columnas)
+# 2) Mapear yes/no → 1/0
 for col in YESNO_COLS:
     if col in df.columns:
         df[col] = (df[col].astype(str).str.lower().map({"yes": 1, "no": 0})).astype("Int64")

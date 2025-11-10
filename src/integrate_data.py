@@ -11,7 +11,7 @@ def main():
     df_clean = pd.read_csv(CLEAN_CSV)
     df_feat  = pd.read_csv(FEATS_CSV)
 
-    # Chequeos básicos
+    # Chequeos basicos
     rows_clean, rows_feat = len(df_clean), len(df_feat)
     assert rows_clean == rows_feat, (
         f"Inconsistencia: filas clean={rows_clean} vs features={rows_feat}"
@@ -29,7 +29,7 @@ def main():
     Path(OUT_FINAL).parent.mkdir(parents=True, exist_ok=True)
     df_final.to_csv(OUT_FINAL, index=False)
 
-    # Reporte para DVC (lo que te falta)
+    # Reporte para DVC
     Path(OUT_REPORT).parent.mkdir(parents=True, exist_ok=True)
     added   = sorted(set(df_final.columns) - set(df_clean.columns))
     removed = sorted(set(df_clean.columns) - set(df_final.columns))
