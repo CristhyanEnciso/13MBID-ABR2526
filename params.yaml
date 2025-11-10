@@ -20,8 +20,12 @@ select:
     - nr.employed
     - y
 features:
+  out_csv: data/interim/banking_features.csv
   derive_prev_contact_from_pdays: true
   pdays_never_value: 999
+  drop_pdays_after_derive: true
+  yes_no_to_binary_cols: ["housing", "loan", "default", "y"]
+  report_summary: true
 format:
   target_name: y
   positive_label: "yes"

@@ -82,4 +82,28 @@ stages:
       - data/interim/banking_clean.csv
     metrics:
       - reports/cleaning/data_loss_report.csv
-    
+      
+  build_features:
+    cmd: python -m src.build_features
+    deps:
+      - src/build_features.py
+      - data/interim/banking_clean.csv
+      - params.yaml
+    outs:
+      - data/interim/banking_features.csv
+    metrics:
+      - reports/features/features_built.csv
+      - reports/features/feature_summary.csv
+      - reports/features/feature_dtypes.csv
+      - reports/features/target_balance_after_features_pct.csv
+
+  integrate_data:
+    cmd: python -m src.integrate_data
+    deps:
+      - src/integrate_data.py
+      - data/interim/banking_features.csv
+    outs:
+      - data/processed/bank_final.csv
+    metrics:
+      - reports/integration/integration_summary.csv 
+

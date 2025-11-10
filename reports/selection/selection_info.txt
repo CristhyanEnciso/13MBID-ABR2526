@@ -1,4 +1,4 @@
-timestamp: 2025-11-09 10:56:53
+timestamp: 2025-11-09 20:42:54
 input: data\raw\bank-additional-full.csv
 output: data\interim\banking_selected.csv
 dropped_declared: ['default']
