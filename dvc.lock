@@ -159,8 +159,8 @@ stages:
       size: 4184271
     - path: params.yaml
       hash: md5
-      md5: 5fb54a4643dc33c78988d9d01b5523b4
-      size: 537
+      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
+      size: 702
     - path: src/clean_data.py
       hash: md5
       md5: f37f0ab676331cf5a854d391e245a555
@@ -174,3 +174,59 @@ stages:
       hash: md5
       md5: 62616a0ad7e0d9b855bca83d4a052d7a
       size: 126
+  build_features:
+    cmd: python -m src.build_features
+    deps:
+    - path: data/interim/banking_clean.csv
+      hash: md5
+      md5: 20110b1ffaaf4cbf92e8d0a743456f50
+      size: 3533102
+    - path: params.yaml
+      hash: md5
+      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
+      size: 702
+    - path: src/build_features.py
+      hash: md5
+      md5: e8fef08645aa6f97c7d416e912125882
+      size: 2613
+    outs:
+    - path: data/interim/banking_features.csv
+      hash: md5
+      md5: a71159ec003a9b57e6233b7ec97690dd
+      size: 3494182
+    - path: reports/features/feature_dtypes.csv
+      hash: md5
+      md5: 6c34193d604fce9507d49c9460947833
+      size: 299
+    - path: reports/features/feature_summary.csv
+      hash: md5
+      md5: 81258d3167b91763bdbf8a185e3bd045
+      size: 257
+    - path: reports/features/features_built.csv
+      hash: md5
+      md5: a8f193f46e5b1a76216191dc95c913ab
+      size: 169
+    - path: reports/features/target_balance_after_features_pct.csv
+      hash: md5
+      md5: 709faf5b3f8254148675ecaa24e9533b
+      size: 30
+  integrate_data:
+    cmd: python -m src.integrate_data
+    deps:
+    - path: data/interim/banking_features.csv
+      hash: md5
+      md5: a71159ec003a9b57e6233b7ec97690dd
+      size: 3494182
+    - path: src/integrate_data.py
+      hash: md5
+      md5: 3250b1404d96128480e9a022155beb93
+      size: 1632
+    outs:
+    - path: data/processed/bank_final.csv
+      hash: md5
+      md5: a71159ec003a9b57e6233b7ec97690dd
+      size: 3494182
+    - path: reports/integration/integration_summary.csv
+      hash: md5
+      md5: 838d88e38583cdce38c1d50511a174be
+      size: 208
