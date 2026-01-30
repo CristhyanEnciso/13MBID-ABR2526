@@ -19,7 +19,8 @@ from sklearn.utils import resample
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-
+from sklearn.svm import LinearSVC
+from sklearn.neighbors import KNeighborsClassifier
 
 PARAMS = yaml.safe_load(Path("params.yaml").read_text(encoding="utf-8"))
 
@@ -132,8 +133,9 @@ def main():
 
     candidates = [
         ("LogisticRegression", LogisticRegression(max_iter=200, solver="liblinear", random_state=random_state)),
+        ("LinearSVC", LinearSVC(random_state=random_state)),
+        ("KNN", KNeighborsClassifier(n_neighbors=5)),
         ("DecisionTree", DecisionTreeClassifier(random_state=random_state)),
-        ("RandomForest", RandomForestClassifier(n_estimators=200, random_state=random_state, n_jobs=-1)),
     ]
 
     mlflow.set_tracking_uri(tracking_uri)

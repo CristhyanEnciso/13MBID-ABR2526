@@ -267,11 +267,11 @@ stages:
       size: 967
     - path: src/experiment_models_mlflow.py
       hash: md5
-      md5: 0c649816a7d18ab650f386705c0eb9d1
-      size: 6478
+      md5: 604db8dbbea4b6f80ca2e3fd66903bb6
+      size: 6573
     outs:
     - path: reports/model
       hash: md5
-      md5: e673004d61ad18b171be54ce6de7598f.dir
-      size: 3033
-      nfiles: 4
+      md5: 33295e541e159b99b1f805750b803121.dir
+      size: 3948
+      nfiles: 5
