@@ -131,8 +131,8 @@ stages:
       size: 5834924
     - path: params.yaml
       hash: md5
-      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
-      size: 702
+      md5: 7e09a9f6fd6ac9fee87484ab8a454390
+      size: 967
     - path: src/select_features.py
       hash: md5
       md5: b95e754612c682e0685e5c5f2063ff11
@@ -159,8 +159,8 @@ stages:
       size: 4184271
     - path: params.yaml
       hash: md5
-      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
-      size: 702
+      md5: 7e09a9f6fd6ac9fee87484ab8a454390
+      size: 967
     - path: src/clean_data.py
       hash: md5
       md5: f37f0ab676331cf5a854d391e245a555
@@ -183,12 +183,12 @@ stages:
       size: 3533102
     - path: params.yaml
       hash: md5
-      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
-      size: 702
+      md5: 7e09a9f6fd6ac9fee87484ab8a454390
+      size: 967
     - path: src/build_features.py
       hash: md5
-      md5: e8fef08645aa6f97c7d416e912125882
-      size: 2613
+      md5: 995527b644a8b2b28d4917e6d1175a6b
+      size: 2549
     outs:
     - path: data/interim/banking_features.csv
       hash: md5
@@ -219,8 +219,8 @@ stages:
       size: 3494182
     - path: src/integrate_data.py
       hash: md5
-      md5: 3250b1404d96128480e9a022155beb93
-      size: 1632
+      md5: 5bc174b93ff86e788da68f25bba0f91a
+      size: 1613
     outs:
     - path: data/processed/bank_final.csv
       hash: md5
@@ -239,8 +239,8 @@ stages:
       size: 3494182
     - path: params.yaml
       hash: md5
-      md5: cf44cb33b4d589d0e6e8e53c5a7e2311
-      size: 702
+      md5: 7e09a9f6fd6ac9fee87484ab8a454390
+      size: 967
     - path: src/format_data.py
       hash: md5
       md5: 7766155b5e23ff5a8d8790810daf0bf6
@@ -254,3 +254,24 @@ stages:
       hash: md5
       md5: 25f09e33136bd87baacd366028b027e3
       size: 171
+  model_selection:
+    cmd: python -m src.experiment_models_mlflow
+    deps:
+    - path: data/processed/bank_formatted.csv
+      hash: md5
+      md5: e62269d8c1f69bb0c6c71d4cda50c2e0
+      size: 12440357
+    - path: params.yaml
+      hash: md5
+      md5: 7e09a9f6fd6ac9fee87484ab8a454390
+      size: 967
+    - path: src/experiment_models_mlflow.py
+      hash: md5
+      md5: 0c649816a7d18ab650f386705c0eb9d1
+      size: 6478
+    outs:
+    - path: reports/model
+      hash: md5
+      md5: e673004d61ad18b171be54ce6de7598f.dir
+      size: 3033
+      nfiles: 4

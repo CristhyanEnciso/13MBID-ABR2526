@@ -117,3 +117,13 @@ stages:
       - data/processed/bank_formatted.csv
     metrics:
       - reports/format/format_summary.txt
+
+  model_selection:
+    cmd: python -m src.experiment_models_mlflow
+    deps:
+      - src/experiment_models_mlflow.py
+      - data/processed/bank_formatted.csv
+      - params.yaml
+    outs:
+      - reports/model:
+          cache: false
