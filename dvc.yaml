@@ -127,3 +127,12 @@ stages:
     outs:
       - reports/model:
           cache: false
+
+  train_model:
+    cmd: python -m src.train_model
+    deps:
+      - src/train_model.py
+      - data/processed/bank_formatted.csv
+      - params.yaml
+    metrics:
+      - metrics/train_metrics.json

@@ -131,8 +131,8 @@ stages:
       size: 5834924
     - path: params.yaml
       hash: md5
-      md5: 7e09a9f6fd6ac9fee87484ab8a454390
-      size: 967
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
     - path: src/select_features.py
       hash: md5
       md5: b95e754612c682e0685e5c5f2063ff11
@@ -159,8 +159,8 @@ stages:
       size: 4184271
     - path: params.yaml
       hash: md5
-      md5: 7e09a9f6fd6ac9fee87484ab8a454390
-      size: 967
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
     - path: src/clean_data.py
       hash: md5
       md5: f37f0ab676331cf5a854d391e245a555
@@ -183,8 +183,8 @@ stages:
       size: 3533102
     - path: params.yaml
       hash: md5
-      md5: 7e09a9f6fd6ac9fee87484ab8a454390
-      size: 967
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
     - path: src/build_features.py
       hash: md5
       md5: 995527b644a8b2b28d4917e6d1175a6b
@@ -239,8 +239,8 @@ stages:
       size: 3494182
     - path: params.yaml
       hash: md5
-      md5: 7e09a9f6fd6ac9fee87484ab8a454390
-      size: 967
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
     - path: src/format_data.py
       hash: md5
       md5: 7766155b5e23ff5a8d8790810daf0bf6
@@ -275,3 +275,23 @@ stages:
       md5: 33295e541e159b99b1f805750b803121.dir
       size: 3948
       nfiles: 5
+  train_model:
+    cmd: python -m src.train_model
+    deps:
+    - path: data/processed/bank_formatted.csv
+      hash: md5
+      md5: e62269d8c1f69bb0c6c71d4cda50c2e0
+      size: 12440357
+    - path: params.yaml
+      hash: md5
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
+    - path: src/train_model.py
+      hash: md5
+      md5: 40f064bdf42d7352cc3c2e3dca8722ef
+      size: 9405
+    outs:
+    - path: metrics/train_metrics.json
+      hash: md5
+      md5: dcd3fac8970191f686488dd443e5be77
+      size: 516

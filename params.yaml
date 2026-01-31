@@ -39,3 +39,28 @@ experiment:
   balancing_method: undersampling
   tracking_uri: "file:./mlruns"
   experiment_name: "Proyecto 13MBID-ABR2526 - Experimentación"
+
+train:
+  input_csv: data/processed/bank_formatted.csv
+  target_col: y
+  test_size: 0.2
+  random_state: 42
+  balancing_method: undersample   
+
+  model:
+    name: KNN                     
+    knn:
+      n_neighbors: 5
+      weights: uniform         
+      n_jobs: -1
+    decision_tree:
+      max_depth: null
+      min_samples_leaf: 1
+    random_forest:
+      n_estimators: 200
+      n_jobs: -1
+    logistic_regression:
+      max_iter: 200
+      solver: liblinear
+    linear_svc:
+      C: 1.0
