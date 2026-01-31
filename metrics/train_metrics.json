@@ -1,0 +1,21 @@
+{
+  "model_name": "KNN",
+  "balancing_method": "undersample",
+  "random_state": 42,
+  "test_size": 0.2,
+  "train_samples": 27749,
+  "train_samples_balanced": 6772,
+  "test_samples": 6938,
+  "metrics_train": {
+    "accuracy": 0.7821913762551683,
+    "precision": 0.8,
+    "recall": 0.7525103366804489,
+    "f1": 0.7755288388373155
+  },
+  "metrics_test": {
+    "accuracy": 0.7061112712597291,
+    "precision": 0.2452991452991453,
+    "recall": 0.6776859504132231,
+    "f1": 0.3602133668026357
+  }
+}
