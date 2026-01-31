@@ -1,1 +1,6 @@
 /summary
+# --- Permitir evidencias de evaluación (US17) ---
+!reports/
+!reports/evaluation/
+!reports/evaluation/**
+!reports/.gitignore

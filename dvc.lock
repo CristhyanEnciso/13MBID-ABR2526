@@ -263,8 +263,8 @@ stages:
       size: 12440357
     - path: params.yaml
       hash: md5
-      md5: 7e09a9f6fd6ac9fee87484ab8a454390
-      size: 967
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
     - path: src/experiment_models_mlflow.py
       hash: md5
       md5: 604db8dbbea4b6f80ca2e3fd66903bb6
@@ -295,3 +295,36 @@ stages:
       hash: md5
       md5: dcd3fac8970191f686488dd443e5be77
       size: 516
+  evaluate_model:
+    cmd: python -m src.evaluate_model
+    deps:
+    - path: data/processed/bank_formatted.csv
+      hash: md5
+      md5: e62269d8c1f69bb0c6c71d4cda50c2e0
+      size: 12440357
+    - path: models/model.pkl
+      hash: md5
+      md5: e03d589e221bd2f61d659f45d1077c61
+      size: 2331524
+    - path: params.yaml
+      hash: md5
+      md5: 26f0bb83e01d470d00bfdff611bf8ae6
+      size: 1483
+    - path: reports/model/shortlist_modelos.csv
+      hash: md5
+      md5: e42b6e39cc0c184ec14795482a88dc63
+      size: 1492
+    - path: src/evaluate_model.py
+      hash: md5
+      md5: 4fff94618c0e4677d0948024821cacdc
+      size: 11035
+    outs:
+    - path: metrics/eval_metrics.json
+      hash: md5
+      md5: c542be50e50a6e8913838634bf62b4ae
+      size: 1553
+    - path: reports/evaluation
+      hash: md5
+      md5: ae4ee089aec937a33ea9a2ce7107985e.dir
+      size: 54295
+      nfiles: 7

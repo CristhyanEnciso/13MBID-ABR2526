@@ -136,3 +136,16 @@ stages:
       - params.yaml
     metrics:
       - metrics/train_metrics.json
+      
+  evaluate_model:
+    cmd: python -m src.evaluate_model
+    deps:
+      - src/evaluate_model.py
+      - models/model.pkl
+      - data/processed/bank_formatted.csv
+      - params.yaml
+      - reports/model/shortlist_modelos.csv
+    outs:
+      - reports/evaluation
+    metrics:
+      - metrics/eval_metrics.json
