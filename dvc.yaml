@@ -136,7 +136,7 @@ stages:
       - params.yaml
     metrics:
       - metrics/train_metrics.json
-      
+
   evaluate_model:
     cmd: python -m src.evaluate_model
     deps:
@@ -144,8 +144,19 @@ stages:
       - models/model.pkl
       - data/processed/bank_formatted.csv
       - params.yaml
-      - reports/model/shortlist_modelos.csv
-    outs:
-      - reports/evaluation
     metrics:
       - metrics/eval_metrics.json
+    plots:
+      - reports/evaluation/roc_curve_data.json
+      - reports/evaluation/pr_curve_data.json
+
+  regression_test:
+    cmd: python -m pytest -q tests/test_model_regression.py --disable-warnings --maxfail=1 --html=reports/tests/us18_regression_report.html --self-contained-html && python -c "import json,time; json.dump({'status':'pass','ts':time.time()}, open('metrics/regression_test.json','w'), indent=2)"
+    deps:
+      - tests/test_model_regression.py
+      - metrics/baseline_eval_metrics.json
+      - metrics/eval_metrics.json
+      - params.yaml
+    metrics:
+      - metrics/regression_test.json
+

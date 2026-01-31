@@ -64,3 +64,9 @@ train:
       solver: liblinear
     linear_svc:
       C: 1.0
+
+regression:
+  max_drop:
+    recall: 0.05
+    f1: 0.05
+    roc_auc: 0.03

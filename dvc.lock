@@ -131,8 +131,8 @@ stages:
       size: 5834924
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/select_features.py
       hash: md5
       md5: b95e754612c682e0685e5c5f2063ff11
@@ -159,8 +159,8 @@ stages:
       size: 4184271
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/clean_data.py
       hash: md5
       md5: f37f0ab676331cf5a854d391e245a555
@@ -183,8 +183,8 @@ stages:
       size: 3533102
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/build_features.py
       hash: md5
       md5: 995527b644a8b2b28d4917e6d1175a6b
@@ -239,8 +239,8 @@ stages:
       size: 3494182
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/format_data.py
       hash: md5
       md5: 7766155b5e23ff5a8d8790810daf0bf6
@@ -263,8 +263,8 @@ stages:
       size: 12440357
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/experiment_models_mlflow.py
       hash: md5
       md5: 604db8dbbea4b6f80ca2e3fd66903bb6
@@ -308,12 +308,8 @@ stages:
       size: 2331524
     - path: params.yaml
       hash: md5
-      md5: 26f0bb83e01d470d00bfdff611bf8ae6
-      size: 1483
-    - path: reports/model/shortlist_modelos.csv
-      hash: md5
-      md5: e42b6e39cc0c184ec14795482a88dc63
-      size: 1492
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
     - path: src/evaluate_model.py
       hash: md5
       md5: 4fff94618c0e4677d0948024821cacdc
@@ -321,10 +317,40 @@ stages:
     outs:
     - path: metrics/eval_metrics.json
       hash: md5
+      md5: 9ad5f84a1066abba1b44468507ea6933
+      size: 1553
+    - path: reports/evaluation/pr_curve_data.json
+      hash: md5
+      md5: e68a8dbd7f4a1e449236c06cea167bc3
+      size: 439
+    - path: reports/evaluation/roc_curve_data.json
+      hash: md5
+      md5: b258f914c3372f5b8d71d26c6d5314ba
+      size: 428
+  regression_test:
+    cmd: python -m pytest -q tests/test_model_regression.py --disable-warnings --maxfail=1
+      --html=reports/tests/us18_regression_report.html --self-contained-html && python
+      -c "import json,time; json.dump({'status':'pass','ts':time.time()}, open('metrics/regression_test.json','w'),
+      indent=2)"
+    deps:
+    - path: metrics/baseline_eval_metrics.json
+      hash: md5
       md5: c542be50e50a6e8913838634bf62b4ae
       size: 1553
-    - path: reports/evaluation
+    - path: metrics/eval_metrics.json
       hash: md5
-      md5: ae4ee089aec937a33ea9a2ce7107985e.dir
-      size: 54295
-      nfiles: 7
+      md5: 9ad5f84a1066abba1b44468507ea6933
+      size: 1553
+    - path: params.yaml
+      hash: md5
+      md5: 41d8cdaebeac5162c49da62c8d4bc385
+      size: 1562
+    - path: tests/test_model_regression.py
+      hash: md5
+      md5: 180373f09ed7d255c7cf91eccb7d0d44
+      size: 1186
+    outs:
+    - path: metrics/regression_test.json
+      hash: md5
+      md5: ecdae57142603f8d95104a81ed9aaa62
+      size: 53
