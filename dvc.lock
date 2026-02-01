@@ -48,8 +48,8 @@ stages:
       size: 5834924
     - path: src/data_visualization.py
       hash: md5
-      md5: 6924d3e5762ca837d18a3b14e84c1fbf
-      size: 3519
+      md5: e818994d19b13dedfff38edaafb2030c
+      size: 3490
     outs:
     - path: reports/figures/eda
       hash: md5
@@ -267,14 +267,13 @@ stages:
       size: 1562
     - path: src/experiment_models_mlflow.py
       hash: md5
-      md5: 604db8dbbea4b6f80ca2e3fd66903bb6
-      size: 6573
+      md5: 2d2050708e0bde8c8cd138b29f617952
+      size: 6577
     outs:
-    - path: reports/model
+    - path: reports/selection/shortlist_modelos.csv
       hash: md5
-      md5: 33295e541e159b99b1f805750b803121.dir
-      size: 3948
-      nfiles: 5
+      md5: e42b6e39cc0c184ec14795482a88dc63
+      size: 1492
   train_model:
     cmd: python -m src.train_model
     deps:

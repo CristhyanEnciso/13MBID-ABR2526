@@ -1,4 +1,3 @@
 *
 !.gitignore
-!train_metrics.json
 !baseline_eval_metrics.json
