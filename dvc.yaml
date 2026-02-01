@@ -125,8 +125,7 @@ stages:
       - data/processed/bank_formatted.csv
       - params.yaml
     outs:
-      - reports/model:
-          cache: false
+      - reports/selection/shortlist_modelos.csv
 
   train_model:
     cmd: python -m src.train_model
@@ -134,6 +133,9 @@ stages:
       - src/train_model.py
       - data/processed/bank_formatted.csv
       - params.yaml
+    outs:
+      - models/model.pkl
+      - reports/model
     metrics:
       - metrics/train_metrics.json
 
