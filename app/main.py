@@ -46,7 +46,7 @@ PREPROCESSOR_PATH = Path(os.getenv("PREPROCESSOR_PATH", str(MODELS_DIR / "prepro
 FEATURE_COLUMNS_PATH = Path(os.getenv("FEATURE_COLUMNS_PATH", str(MODELS_DIR / "feature_columns.json")))
 FORMATTED_DATA_PATH = Path(os.getenv("FORMATTED_DATA_PATH", str(DATA_DIR / "bank_formatted.csv")))
 
-# compatibilidad con tu repo (si usas decision_tree_model.pkl)
+# Compatibilidad con tu repo (si usas decision_tree_model.pkl)
 if not MODEL_PATH.exists():
     alt = MODELS_DIR / "decision_tree_model.pkl"
     if alt.exists():
@@ -88,7 +88,7 @@ class PredictionResponse(BaseModel):
 # Estado global (artefactos)
 # ---------------------------
 model = None
-preprocessor = None
+preprocessor = None  # se carga solo para mostrar en /health (no se usa para inferencia si no produce las 42 cols)
 feature_columns: Optional[List[str]] = None
 
 model_loaded = False
@@ -109,11 +109,13 @@ def _req_to_dict(req: PredictionRequest) -> Dict[str, Any]:
 
 def load_feature_columns() -> Optional[List[str]]:
     """
-    1) Intentar models/feature_columns.json (preferido)
-       Soporta:
+    Carga el esquema FINAL de columnas esperado por el modelo (one-hot).
+    Prioridad:
+    1) models/feature_columns.json (RECOMENDADO y necesario en Render)
+       Formatos soportados:
          - ["col1","col2",...]
          - {"columns": ["col1",...]}
-    2) Fallback: leer cabecera de bank_formatted.csv (solo si existe)
+    2) Fallback local: leer cabecera de data/processed/bank_formatted.csv (si existe)
     """
     # 1) JSON
     if FEATURE_COLUMNS_PATH.exists():
@@ -140,10 +142,6 @@ def load_feature_columns() -> Optional[List[str]]:
 
 
 def encode_request_to_model_features(req: PredictionRequest, expected_cols: List[str]) -> pd.DataFrame:
-    """
-    Convierte el request "crudo" a one-hot y lo alinea a expected_cols.
-    (Solo se usa si NO hay preprocessor o si quieres forzar schema.)
-    """
     raw = pd.DataFrame([_req_to_dict(req)])
 
     categorical_cols = [
@@ -161,7 +159,13 @@ def encode_request_to_model_features(req: PredictionRequest, expected_cols: List
 
     encoded = pd.get_dummies(raw, columns=categorical_cols, dtype=int)
     encoded = encoded.reindex(columns=expected_cols, fill_value=0)
+
+    # Garantía fuerte: nada de strings al modelo
+    # (si aparece algo no numérico, fallará aquí con un error claro)
+    encoded = encoded.astype(float)
+
     return encoded
+
 
 
 def load_artifacts() -> None:
@@ -183,21 +187,21 @@ def load_artifacts() -> None:
         model_error = f"{type(e).__name__}: {e}"
         logger.warning("No se pudo cargar el modelo: %s", model_error)
 
-    # Preprocessor
+    # Preprocessor (solo informativo; NO lo usamos para inferencia si no genera 42 cols)
     try:
         if not PREPROCESSOR_PATH.exists():
             raise FileNotFoundError(f"No existe el preprocessor en: {PREPROCESSOR_PATH}")
         preprocessor = joblib.load(PREPROCESSOR_PATH)
         preprocessor_loaded = True
         preprocessor_error = None
-        logger.info("Preprocesador cargado correctamente: %s (%s)", type(preprocessor).__name__, PREPROCESSOR_PATH)
+        logger.info("Preprocesador cargado: %s (%s)", type(preprocessor).__name__, PREPROCESSOR_PATH)
     except Exception as e:
         preprocessor = None
         preprocessor_loaded = False
         preprocessor_error = f"{type(e).__name__}: {e}"
         logger.warning("No se pudo cargar el preprocessor: %s", preprocessor_error)
 
-    # Feature columns
+    # Feature columns (CRÍTICO para inferencia en Render)
     try:
         feature_columns = load_feature_columns()
         feature_columns_loaded = feature_columns is not None
@@ -235,6 +239,13 @@ def root():
 
 @app.get("/health")
 def health():
+    n_features_in_model = None
+    if model_loaded and model is not None and hasattr(model, "n_features_in_"):
+        try:
+            n_features_in_model = int(getattr(model, "n_features_in_"))
+        except Exception:
+            n_features_in_model = None
+
     return {
         "status": "healthy" if model_loaded else "unhealthy",
         "model_loaded": model_loaded,
@@ -242,6 +253,8 @@ def health():
         "feature_columns_loaded": feature_columns_loaded,
         "model_type": type(model).__name__ if model_loaded and model is not None else None,
         "preprocessor_type": type(preprocessor).__name__ if preprocessor_loaded and preprocessor is not None else None,
+        "n_features_in_model": n_features_in_model,
+        "feature_columns_count": len(feature_columns) if feature_columns_loaded and feature_columns else 0,
         "errors": {
             "model_error": model_error,
             "preprocessor_error": preprocessor_error,
@@ -266,58 +279,52 @@ def health():
 @app.post("/predict", response_model=PredictionResponse)
 def predict(req: PredictionRequest):
     if not model_loaded or model is None:
-        raise HTTPException(status_code=500, detail="Modelo no cargado. Verifica models/model.pkl (o decision_tree_model.pkl).")
+        raise HTTPException(
+            status_code=500,
+            detail="Modelo no cargado. Verifica models/model.pkl (o decision_tree_model.pkl).",
+        )
+
+    if not feature_columns_loaded or not feature_columns:
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "feature_columns no disponible. Incluye models/feature_columns.json "
+                "con las columnas FINALES (one-hot) del entrenamiento."
+            ),
+        )
 
     try:
-        # Caso A (recomendado): usar preprocessor si existe (no dependes del CSV)
-        if preprocessor_loaded and preprocessor is not None:
-            raw_df = pd.DataFrame([_req_to_dict(req)])
-            X = preprocessor.transform(raw_df)
+        # SIEMPRE one-hot + reindex => evita que 'admin.' llegue al modelo
+        X = encode_request_to_model_features(req, feature_columns)
 
-        # Caso B: si no hay preprocessor, usar schema feature_columns (JSON/CSV)
-        else:
-            if not feature_columns_loaded or not feature_columns:
-                raise HTTPException(
-                    status_code=500,
-                    detail=(
-                        "No se pudo determinar el esquema de features. "
-                        "Asegura models/feature_columns.json en el repo (recomendado)."
-                    ),
+        # Validación (opcional pero útil)
+        if hasattr(model, "n_features_in_"):
+            expected = int(model.n_features_in_)
+            if int(X.shape[1]) != expected:
+                raise ValueError(
+                    f"X has {X.shape[1]} features, but model is expecting {expected} features as input."
                 )
-            X = encode_request_to_model_features(req, feature_columns)
 
-        # Predicción
         y_pred = model.predict(X)[0]
 
-        # Probabilidades
-        prob_yes, prob_no = 0.0, 0.0
+        probability: Dict[str, float] = {}
         if hasattr(model, "predict_proba"):
             proba = model.predict_proba(X)[0]
             classes = list(getattr(model, "classes_", []))
+            probability = {str(c): float(p) for c, p in zip(classes, proba)}
 
-            # localizar yes/no si existen
-            if "yes" in classes and "no" in classes:
-                prob_yes = float(proba[classes.index("yes")])
-                prob_no = float(proba[classes.index("no")])
-            else:
-                # fallback: tomar última como positiva
-                prob_yes = float(proba[-1])
-                prob_no = float(1.0 - prob_yes)
-
-        # Normalizar etiqueta
         prediction_label = "yes" if str(y_pred).lower() in ("1", "yes", "true") else "no"
 
         return {
             "prediction": prediction_label,
-            "probability": {"no": float(prob_no), "yes": float(prob_yes)},
+            "probability": probability,
             "model_info": {
                 "model_type": type(model).__name__,
                 "preprocessor_type": type(preprocessor).__name__ if preprocessor is not None else None,
+                "n_features": int(X.shape[1]),
             },
         }
 
-    except HTTPException:
-        raise
     except Exception as e:
         logger.exception("Error en predicción")
         raise HTTPException(status_code=400, detail=f"Error en predicción: {str(e)}")
