@@ -4,7 +4,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import joblib
 import pandas as pd
@@ -80,7 +80,7 @@ class PredictionRequest(BaseModel):
 
 class PredictionResponse(BaseModel):
     prediction: str
-    probability: Dict[str, float]
+    probability: Dict[str, float]  # SIEMPRE {"no": x, "yes": y}
     model_info: Dict[str, Any]
 
 
@@ -88,7 +88,7 @@ class PredictionResponse(BaseModel):
 # Estado global (artefactos)
 # ---------------------------
 model = None
-preprocessor = None  # se carga solo para mostrar en /health (no se usa para inferencia si no produce las 42 cols)
+preprocessor = None  # informativo (solo /health)
 feature_columns: Optional[List[str]] = None
 
 model_loaded = False
@@ -142,6 +142,11 @@ def load_feature_columns() -> Optional[List[str]]:
 
 
 def encode_request_to_model_features(req: PredictionRequest, expected_cols: List[str]) -> pd.DataFrame:
+    """
+    - Hace one-hot del request
+    - Reindex a las columnas EXACTAS del entrenamiento (expected_cols)
+    - Fuerza a numérico para que nunca pase un string al modelo
+    """
     raw = pd.DataFrame([_req_to_dict(req)])
 
     categorical_cols = [
@@ -161,11 +166,44 @@ def encode_request_to_model_features(req: PredictionRequest, expected_cols: List
     encoded = encoded.reindex(columns=expected_cols, fill_value=0)
 
     # Garantía fuerte: nada de strings al modelo
-    # (si aparece algo no numérico, fallará aquí con un error claro)
     encoded = encoded.astype(float)
 
     return encoded
 
+
+def _normalize_proba_to_no_yes(proba, classes) -> Tuple[float, float, Dict[str, float]]:
+    """
+    Normaliza probabilidades a:
+      prob_no, prob_yes y además devuelve un diccionario raw (por depuración).
+
+    Soporta clases:
+      - ["no","yes"]
+      - [0,1]
+      - ["0","1"]
+      - [False, True]
+    """
+    raw = {str(c): float(p) for c, p in zip(classes, proba)}
+
+    # normalizamos a strings lower para comparar
+    cls_low = [str(c).strip().lower() for c in classes]
+
+    yes_candidates = {"yes", "1", "true"}
+    no_candidates = {"no", "0", "false"}
+
+    idx_yes = next((i for i, s in enumerate(cls_low) if s in yes_candidates), None)
+    idx_no = next((i for i, s in enumerate(cls_low) if s in no_candidates), None)
+
+    # Fallback razonable si no detectamos
+    # (primera=negativa, última=positiva)
+    if idx_yes is None and len(cls_low) >= 2:
+        idx_yes = len(cls_low) - 1
+    if idx_no is None and len(cls_low) >= 2:
+        idx_no = 0 if idx_yes != 0 else 1
+
+    prob_yes = float(proba[idx_yes]) if idx_yes is not None else 0.0
+    prob_no = float(proba[idx_no]) if idx_no is not None else float(1.0 - prob_yes)
+
+    return prob_no, prob_yes, raw
 
 
 def load_artifacts() -> None:
@@ -187,7 +225,7 @@ def load_artifacts() -> None:
         model_error = f"{type(e).__name__}: {e}"
         logger.warning("No se pudo cargar el modelo: %s", model_error)
 
-    # Preprocessor (solo informativo; NO lo usamos para inferencia si no genera 42 cols)
+    # Preprocessor (solo informativo)
     try:
         if not PREPROCESSOR_PATH.exists():
             raise FileNotFoundError(f"No existe el preprocessor en: {PREPROCESSOR_PATH}")
@@ -294,10 +332,10 @@ def predict(req: PredictionRequest):
         )
 
     try:
-        # SIEMPRE one-hot + reindex => evita que 'admin.' llegue al modelo
+        # SIEMPRE one-hot + reindex (evita que 'admin.' llegue al modelo)
         X = encode_request_to_model_features(req, feature_columns)
 
-        # Validación (opcional pero útil)
+        # Validación (útil para detectar desalineación)
         if hasattr(model, "n_features_in_"):
             expected = int(model.n_features_in_)
             if int(X.shape[1]) != expected:
@@ -307,21 +345,27 @@ def predict(req: PredictionRequest):
 
         y_pred = model.predict(X)[0]
 
-        probability: Dict[str, float] = {}
+        # ---- Probabilidades NORMALIZADAS a {"no":..., "yes":...} ----
+        prob_no, prob_yes = 0.0, 0.0
+        probability_raw: Dict[str, float] = {}
+
         if hasattr(model, "predict_proba"):
             proba = model.predict_proba(X)[0]
             classes = list(getattr(model, "classes_", []))
-            probability = {str(c): float(p) for c, p in zip(classes, proba)}
+            prob_no, prob_yes, probability_raw = _normalize_proba_to_no_yes(proba, classes)
 
-        prediction_label = "yes" if str(y_pred).lower() in ("1", "yes", "true") else "no"
+        # Normalizar etiqueta salida
+        prediction_label = "yes" if str(y_pred).strip().lower() in ("1", "yes", "true") else "no"
 
         return {
             "prediction": prediction_label,
-            "probability": probability,
+            "probability": {"no": float(prob_no), "yes": float(prob_yes)},
             "model_info": {
                 "model_type": type(model).__name__,
                 "preprocessor_type": type(preprocessor).__name__ if preprocessor is not None else None,
                 "n_features": int(X.shape[1]),
+                # opcional: útil para depurar sin romper la UI
+                "probability_raw": probability_raw,
             },
         }
 
