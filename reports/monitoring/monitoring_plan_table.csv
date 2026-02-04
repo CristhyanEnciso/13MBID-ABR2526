@@ -1,4 +1,3 @@
-```csv
 category,metric,window,threshold,severity,action,evidence
 operational,api_availability,24h,>=99%,P2,Revisar incidentes/hosting; validar /health; si persiste escalar,Health check + logs
 operational,predict_latency_p95,1h,<800ms,P2,Revisar carga; revisar logs; optimizar; si persiste aplicar rollback,Logs + medición latencia
@@ -9,4 +8,3 @@ functional,invalid_inputs_422,24h,<3%,P3,Corregir UI/inputs; revisar validacione
 drift,psi_feature_major,7d,<0.20,P2,Si PSI>=0.20 por 2 periodos → evaluar retraining,Reporte PSI
 drift,psi_score,7d,<0.20,P2,Si PSI>=0.20 sostenido → evaluar retraining,Distribución score
 label,metric_drop_vs_baseline,release,delta <= -0.05 (F1) o -0.03 (AUC),P1,No promover modelo; rollback; retraining,Reporte evaluación vs baseline
-```

@@ -120,7 +120,7 @@ Las alertas se disparan por ventanas (ej. 15 min / 1 hora / 1 día) según la m�
 - **Severidad P2**: degradación operativa (latencia alta).
 - **Severidad P3**: señales de drift o comportamiento anómalo (investigar).
 
-(Ver tabla exportable en `reports/monitoring/monitoring_plan_table.csv` si se incluye).
+(Ver tabla exportable en `reports/monitoring/monitoring_plan_table.csv`).
 
 ---
 
