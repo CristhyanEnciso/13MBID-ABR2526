@@ -197,7 +197,7 @@ def main(
                          "cv_recall_mean": 74.6788990825688, "cv_recall_std": 0.010444219795051512},
     }
 
-    shortlist_path = Path("reports/model/shortlist_modelos.csv")
+    shortlist_path = Path("reports/selection/shortlist_modelos.csv")
     current_rows = {}
     if shortlist_path.exists():
         s = pd.read_csv(shortlist_path)

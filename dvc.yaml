@@ -134,8 +134,8 @@ stages:
       - data/processed/bank_formatted.csv
       - params.yaml
     outs:
-      - models/model.pkl
-      - reports/model
+      - reports/model:
+          cache: false
     metrics:
       - metrics/train_metrics.json
 

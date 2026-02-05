@@ -1,7 +1,7 @@
 """
 US14 - Comparación de técnicas de modelado y shortlist (MLflow)
 Entrada:  data/processed/bank_formatted.csv
-Salida:   reports/model/shortlist_modelos.csv
+Salida:   reports/selection/shortlist_modelos.csv
 MLflow:   ./mlruns (local)
 """
 
@@ -116,7 +116,7 @@ def main():
     tracking_uri = cfg.get("tracking_uri", "file:./mlruns")
     experiment_name = cfg.get("experiment_name", "Proyecto 13MBID-ABR2526 - Experimentación")
 
-    Path("reports/model").mkdir(parents=True, exist_ok=True)
+    Path("reports/selection").mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(data_path)
 
@@ -168,7 +168,7 @@ def main():
     if len(df_out) > 0:
         df_out.loc[df_out.index[0], "recommended_baseline"] = True
 
-    out_csv = Path("reports/model/shortlist_modelos.csv")
+    out_csv = Path("reports/selection/shortlist_modelos.csv")
     df_out.to_csv(out_csv, index=False)
     print(f"[OK] Generado: {out_csv}")
 

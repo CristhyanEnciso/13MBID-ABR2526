@@ -267,8 +267,8 @@ stages:
       size: 1562
     - path: src/experiment_models_mlflow.py
       hash: md5
-      md5: 2d2050708e0bde8c8cd138b29f617952
-      size: 6577
+      md5: 5db559a26c3b129769f67ba09807f5e4
+      size: 6585
     outs:
     - path: reports/selection/shortlist_modelos.csv
       hash: md5
@@ -287,17 +287,13 @@ stages:
       size: 1562
     - path: src/train_model.py
       hash: md5
-      md5: 9ebe0b20a9a35b391eaefcdd170172eb
-      size: 11530
+      md5: 55c470da910c769005540405316e3c9a
+      size: 9679
     outs:
     - path: metrics/train_metrics.json
       hash: md5
       md5: dcd3fac8970191f686488dd443e5be77
       size: 516
-    - path: models/model.pkl
-      hash: md5
-      md5: efc00558214fc5eb44b19430840b08a4
-      size: 2330372
     - path: reports/model
       hash: md5
       md5: 99c1bfa8330a6c30243d43fa896df088.dir
@@ -320,12 +316,12 @@ stages:
       size: 1562
     - path: src/evaluate_model.py
       hash: md5
-      md5: 4fff94618c0e4677d0948024821cacdc
-      size: 11035
+      md5: 7f8beca1840568ed045add391c62cdab
+      size: 11039
     outs:
     - path: metrics/eval_metrics.json
       hash: md5
-      md5: 9ad5f84a1066abba1b44468507ea6933
+      md5: b0ebc9284ab9e65b1671bc8e66cab3fd
       size: 1553
     - path: reports/evaluation/pr_curve_data.json
       hash: md5
@@ -343,11 +339,11 @@ stages:
     deps:
     - path: metrics/baseline_eval_metrics.json
       hash: md5
-      md5: c542be50e50a6e8913838634bf62b4ae
+      md5: 9ad5f84a1066abba1b44468507ea6933
       size: 1553
     - path: metrics/eval_metrics.json
       hash: md5
-      md5: 9ad5f84a1066abba1b44468507ea6933
+      md5: b0ebc9284ab9e65b1671bc8e66cab3fd
       size: 1553
     - path: params.yaml
       hash: md5
@@ -355,10 +351,10 @@ stages:
       size: 1562
     - path: tests/test_model_regression.py
       hash: md5
-      md5: 180373f09ed7d255c7cf91eccb7d0d44
-      size: 1186
+      md5: d20b6794fc496a3e572998bce084dc20
+      size: 1194
     outs:
     - path: metrics/regression_test.json
       hash: md5
-      md5: ecdae57142603f8d95104a81ed9aaa62
+      md5: f0c25abc41e21b88fee5b6aa1a1dc3ec
       size: 53
