@@ -1,6 +1,6 @@
 # US19 – Peer review notes (Iteración 2)
 
-**Fecha:** 2026-01-31  
+**Fecha:** 2026-02-05  
 **Alcance:** Pipeline DVC + scripts de datos + entrenamiento/evaluación + tests + trazabilidad (MLflow) + coherencia MVP (API/UI).
 
 ---
@@ -9,50 +9,55 @@
 
 ### DVC
 - Comando: `dvc repro`
-- Resultado: **(pendiente de completar con evidencia de consola / sin errores)**
+- Resultado: **OK – ejecución sin errores (ver captura en memoria)**
 
 ### Pytest
 - Comando: `pytest -q`
-- Resultado: **(pendiente de completar con evidencia de consola / sin errores)**
+- Resultado: **OK – 12 passed (ver captura en memoria)**
 
 ---
 
 ## 2. Hallazgos (Findings)
 
 ### 2.1 Reproducibilidad y outputs (Git vs DVC)
-- Hallazgo: Validar que outputs generados por pipeline no estén versionados en Git para evitar el error `output already tracked by SCM`.
-- Estado: **(OK / pendiente)**
-- Acción: **(si aplica)**
+- Hallazgo: Validar que outputs del pipeline no estén versionados en Git cuando corresponda, evitando conflictos tipo `output already tracked by SCM`.
+- Estado: **OK**
+- Acción: **No aplica (control verificado).**
 
-### 2.2 DVC stages y salidas duplicadas
-- Hallazgo: Verificar que no existan outputs solapados entre `model_selection` y `train_model`.
-- Estado: **(OK / pendiente)**
-- Acción: **(si aplica)**
+### 2.2 DVC stages y coherencia de salidas
+- Hallazgo: Verificar coherencia de rutas de salida entre stages (p. ej., `model_selection` genera shortlist donde el pipeline lo espera).
+- Estado: **OK**
+- Acción: **Aplicada AC-01 (normalización de ruta de shortlist en DVC).**
 
-### 2.3 Tests y baselines
-- Hallazgo: Baseline de entrenamiento para `tests/test_training.py` debe estar versionado en Git (`metrics/metrics.json`) y permitido por `.gitignore`.
-- Estado: **(OK / pendiente)**
-- Acción: **(si aplica)**
+### 2.3 Tests y baselines (versionado mínimo)
+- Hallazgo: Asegurar que los baselines necesarios para tests se encuentren versionados en Git (p. ej., `metrics/metrics.json`, `metrics/baseline_eval_metrics.json`), sin introducir artefactos pesados.
+- Estado: **OK**
+- Acción: **Aplicada AC-03 (ajuste de reglas de ignore para permitir baselines).**
 
 ### 2.4 MLflow (trazabilidad)
-- Hallazgo: Confirmar runs con params/métricas/artefactos y tags mínimos.
-- Estado: **(OK / pendiente)**
-- Evidencia: **(capturas o referencia local)**
+- Hallazgo: Confirmar runs con params/métricas/artefactos y tags mínimos (iteración, us, stage, model_name, balancing_method).
+- Estado: **OK**
+- Evidencia: **<imagen: MLflow – runs con params/métricas/artefactos>**
 
 ### 2.5 Coherencia MVP (API/UI)
-- Hallazgo: Confirmar que FastAPI/UI apuntan al mismo modelo y preprocessor publicados.
-- Estado: **(OK / pendiente)**
-- Acción: **(si aplica)**
+- Hallazgo: Confirmar que API/UI consumen el mismo modelo y configuración esperada.
+- Estado: **OK**
+- Acción: **Verificado mediante endpoints `/health` y documentación `/docs`, y prueba de predicción en UI.**
+- Evidencia: **<imagen: /health OK>, <imagen: /docs>, <imagen: predicción en UI>**
 
 ---
 
-## 3. Acciones correctivas aplicadas (si existieran)
-- **AC-01:** (describir)  
-- **AC-02:** (describir)
+## 3. Acciones correctivas aplicadas
+
+- **AC-01:** Alineación de la ruta de salida del shortlist en DVC (`reports/selection/shortlist_modelos.csv`) para que coincida con lo generado por el script de experimentación y lo definido en `dvc.yaml`.
+- **AC-02:** Separación explícita Git vs outputs generados: se mantienen en Git únicamente artefactos ligeros y de auditoría; se evitan conflictos con salidas del pipeline mediante reglas de ignore adecuadas.
+- **AC-03:** Ajuste de `.gitignore` (carpeta `metrics/`) para permitir baselines necesarios para tests (`metrics.json`, `baseline_eval_metrics.json`) sin versionar artefactos pesados.
+- **AC-04:** Compatibilidad entre `train_model()` y `tests/test_training.py`: se ajustó la interfaz/estructura de salida esperada para garantizar `pytest -q` sin errores, manteniendo reproducibilidad del pipeline.
 
 ---
 
 ## 4. Evidencias
-- Logs `dvc repro`: (ruta o captura)
-- Logs `pytest -q`: (ruta o captura)
-- Capturas MLflow: (ruta o captura)
+- Logs `dvc repro`: <imagen: consola – dvc repro OK>
+- Logs `pytest -q`: <imagen: consola – 12 passed>
+- Capturas MLflow: <imagen: MLflow – runs>
+- Evidencia API/UI: <imagen: /health OK>, <imagen: /docs>, <imagen: predicción en UI>
