@@ -1,8 +1,4 @@
 *
 !.gitignore
-# Permitir métricas clave para auditoría/revisión
 !baseline_eval_metrics.json
-!train_metrics.json
-!eval_metrics.json
-!regression_test.json
 !metrics.json

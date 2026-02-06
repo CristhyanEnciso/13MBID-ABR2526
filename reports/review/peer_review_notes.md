@@ -16,7 +16,7 @@
 - Resultado: **OK – 12 passed (ver captura en memoria)**
 
 ---
-
+W
 ## 2. Hallazgos (Findings)
 
 ### 2.1 Reproducibilidad y outputs (Git vs DVC)
