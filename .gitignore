@@ -165,3 +165,9 @@ mlruns
 .datastorage/
 .vscode/
 reports/figures/
+
+# Auxiliares / evidencias locales
+notebooks/
+src.zip
+.github/
+docs/transformations.txt

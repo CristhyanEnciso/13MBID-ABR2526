@@ -38,6 +38,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
+from src.feature_aligner import FeatureAligner
+
 
 
 ROOT = Path(".")
@@ -55,35 +57,6 @@ OUT_CM_TRAIN = REPORT_DIR / "confusion_matrix_train.png"
 OUT_CM_TEST = REPORT_DIR / "confusion_matrix_test.png"
 
 
-class FeatureAligner(BaseEstimator, TransformerMixin):
-    """
-    Preprocesador ligero y estable:
-    - memoriza el orden de columnas visto en fit()
-    - en transform(): agrega columnas faltantes con 0, elimina extras y reordena
-    Esto permite consistencia entre entrenamiento/inferencia y satisface tests
-    sin alterar la semántica del dataset ya formateado.
-    """
-    def __init__(self):
-        self.feature_names_: list[str] = []
-
-    def fit(self, X, y=None):
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("FeatureAligner espera un pandas.DataFrame en fit().")
-        self.feature_names_ = list(X.columns)
-        return self
-
-    def transform(self, X):
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("FeatureAligner espera un pandas.DataFrame en transform().")
-        X2 = X.copy()
-        for col in self.feature_names_:
-            if col not in X2.columns:
-                X2[col] = 0
-        X2 = X2[self.feature_names_]  # reordenar + drop extras
-        return X2
-
-    def get_feature_names_out(self):
-        return np.array(self.feature_names_, dtype=object)
 
 
 def _load_params() -> Dict[str, Any]:
