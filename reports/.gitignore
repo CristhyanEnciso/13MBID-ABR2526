@@ -6,3 +6,11 @@
 !/evaluation/roc_curve_data.json
 !/evaluation/pr_curve_data.json
 reports/selection/selection_info.txt
+
+# Artefactos generados por pipeline (no versionar)
+model/
+cleaning/
+features/
+integration/
+format/
+selection/selection_info.txt
