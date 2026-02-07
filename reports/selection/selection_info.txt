@@ -1,5 +1,0 @@
-timestamp: 2026-01-31 11:17:48
-input: data\raw\bank-additional-full.csv
-output: data\interim\banking_selected.csv
-dropped_declared: ['default']
-kept_from_config: ['age', 'job', 'marital', 'education', 'contact', 'month', 'day_of_week', 'campaign', 'previous', 'poutcome', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed', 'y']
