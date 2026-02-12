@@ -16,13 +16,14 @@
 - Resultado: **OK – 12 passed (ver captura en memoria)**
 
 ---
-W
+
 ## 2. Hallazgos (Findings)
 
 ### 2.1 Reproducibilidad y outputs (Git vs DVC)
-- Hallazgo: Validar que outputs del pipeline no estén versionados en Git cuando corresponda, evitando conflictos tipo `output already tracked by SCM`.
-- Estado: **OK**
-- Acción: **No aplica (control verificado).**
+- Hallazgo: Validar que outputs generados por pipeline no estén versionados en Git cuando corresponda, evitando conflictos tipo `output already tracked by SCM`.
+- Estado: **OK (control aplicado)**
+- Acción: **Aplicada AC-02: se aseguró separación Git vs DVC. Se mantienen en Git solo baselines ligeros (p. ej. `metrics/metrics.json`, `metrics/baseline_eval_metrics.json`) y los outputs generados se gestionan por el pipeline (DVC).**
+- Evidencia: **<imagen: error SCM detectado en laboratorio con `metrics/train_metrics.json` + evidencia de corrección y `dvc repro` OK>**
 
 ### 2.2 DVC stages y coherencia de salidas
 - Hallazgo: Verificar coherencia de rutas de salida entre stages (p. ej., `model_selection` genera shortlist donde el pipeline lo espera).
@@ -44,6 +45,12 @@ W
 - Estado: **OK**
 - Acción: **Verificado mediante endpoints `/health` y documentación `/docs`, y prueba de predicción en UI.**
 - Evidencia: **<imagen: /health OK>, <imagen: /docs>, <imagen: predicción en UI>**
+
+### 2.6 Estabilidad del preprocesador serializado (FeatureAligner)
+- Hallazgo: `pytest` podía fallar al cargar `models/preprocessor.pkl` por resolución inestable de clase (`FeatureAligner`) al serializar/deserializar (error típico: *Can't get attribute ... on __main__*).
+- Estado: **OK**
+- Acción: **Aplicada AC-05: `FeatureAligner` se movió a `src/feature_aligner.py` y se importó explícitamente desde `src/train_model.py` para asegurar que el preprocesador sea importable y estable.**
+- Evidencia: **<imagen: pytest -q OK + joblib.load muestra `src.feature_aligner.FeatureAligner`>**
 
 ---
 

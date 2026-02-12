@@ -23,8 +23,8 @@
 - [x] La verificación de calidad de datos se ejecuta vía pipeline (stages de pruebas).
 
 ## 4. Entrenamiento y artefactos (MVP)
-- [x] `train_model` genera `models/model.pkl` (artefacto del MVP).
-- [x] `models/preprocessor.pkl` existe *(si aplica / informativo para el servicio)*.
+- [x] `train_model` genera `models/model.pkl` (artefacto del MVP). *(output gestionado por pipeline; no versionado en Git)*
+- [x] `train_model` genera `models/preprocessor.pkl` *(requerido para inferencia/tests; estable e importable)*.
 - [x] `metrics/train_metrics.json` se genera y se actualiza.
 - [x] Reportes de entrenamiento se generan en `reports/model/`.
 
@@ -43,7 +43,7 @@
 ## 7. Tests (Pytest)
 - [x] `pytest -q` finaliza sin errores.
 - [x] Métricas relevantes existen y son trazables (`metrics/train_metrics.json`, `metrics/eval_metrics.json`, `metrics/baseline_eval_metrics.json`).
-- [x] El pipeline produce artefactos necesarios para ejecutar inferencia sin fallar (modelo + schema).
+- [x] El pipeline produce artefactos necesarios para ejecutar inferencia sin fallar (modelo + preprocessor + alineación de features (FeatureAligner)).
 
 ## 8. Trazabilidad (MLflow)
 - [x] Los runs se registran en `mlruns/` (local) con params/métricas.

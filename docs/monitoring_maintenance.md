@@ -120,7 +120,7 @@ Las alertas se disparan por ventanas (ej. 15 min / 1 hora / 1 día) según la m�
 - **Severidad P2**: degradación operativa (latencia alta).
 - **Severidad P3**: señales de drift o comportamiento anómalo (investigar).
 
-(Ver tabla exportable en `reports/monitoring/monitoring_plan_table.csv`).
+La tabla de alertas se define y versiona en `reports/monitoring/monitoring_plan_table.csv`, con el formato: `category`, `metric`, `window`, `threshold`, `severity`, `action`, `evidence`. Esta tabla consolida las condiciones de disparo y la evidencia mínima requerida.
 
 ---
 
@@ -194,3 +194,4 @@ git checkout <tag_estable_anterior>
 - Captura de UI prediciendo y mostrando probabilidades
 - Baseline en `metrics/baseline_eval_metrics.json`
 - Este documento (`docs/monitoring_maintenance.md`)
+- Tabla de alertas versionada: `reports/monitoring/monitoring_plan_table.csv`.

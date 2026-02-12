@@ -9,7 +9,7 @@
 
 ## Contexto
 
-Con el **MVP construido** (pipeline reproducible con **DVC**, experimentación registrada en **MLflow** y artefactos de modelo disponibles para consumo), se identifican líneas de trabajo para una siguiente iteración enfocada en:
+Con el **MVP construido y validado en Iteración 2**, el repositorio cuenta con **pipeline reproducible con DVC** (`dvc repro`), pruebas automatizadas (`pytest -q`) y trazabilidad local con MLflow. Además, se incorporó un quality gate MLOps mediante un test de regresión integrado al pipeline (`regression_test`) que compara `metrics/eval_metrics.json` contra `metrics/baseline_eval_metrics.json` usando tolerancias definidas en `params.yaml`. En este contexto, se define el siguiente roadmap de mejoras para una próxima iteración.
 
 - Mejoras en **gestión y calidad de datos**, asegurando reproducción end-to-end.
 - **Automatización** de prácticas (DataOps/MLOps) para reducir esfuerzo manual.
@@ -34,7 +34,7 @@ Estas líneas incorporan explícitamente las recomendaciones del docente (reprod
 
 2. **Versionado estricto de dataset y parámetros (etiquetas por release)**  
    - **Objetivo:** Estandarizar releases del pipeline y datos (tagging + snapshots).  
-   - **Valor esperado:** Poder reproducir exactamente cualquier versión del MVP (auditoría).  
+   - **Valor esperado:** Poder reproducir exactamente cualquier versión del MVP (**tag Git** + `dvc.lock` **como evidencia de la ejecución reproducida**).  
    - **Prioridad:** Alta
 
 3. **Reglas de calidad ampliadas (más tests automáticos en `tests/`)**  
@@ -51,7 +51,7 @@ Estas líneas incorporan explícitamente las recomendaciones del docente (reprod
 
 ### B) Automatización (DataOps/MLOps)
 
-5. **Ejecución automatizada local/CI del pipeline + quality gates**  
+5. **Ejecución automatizada local(y CI opcional) del pipeline + quality gates**  
    - **Objetivo:** Estandarizar comandos (`dvc repro`, `pytest -q`) como “puerta de calidad”.  
    - **Valor esperado:** Menos errores humanos y consistencia antes de publicar cambios.  
    - **Prioridad:** Alta
@@ -84,6 +84,7 @@ Estas líneas incorporan explícitamente las recomendaciones del docente (reprod
    - **Objetivo:** Probar boosting para performance superior en clasificación tabular.  
    - **Valor esperado:** Potencial mejora significativa de métricas.  
    - **Prioridad:** Media
+   - **Nota:** su adopción depende de disponibilidad de dependencia y control de reproducibilidad del entorno.
 
 11. **Calibración de probabilidades + ajuste de threshold**  
    - **Objetivo:** Mejorar decisiones basadas en score (calibrated probabilities, PR trade-off).  
